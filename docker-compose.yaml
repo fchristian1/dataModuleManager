@@ -1,0 +1,68 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: dmm_frontend_react
+    container_name: dmm_frontend_react
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "8080:3000"
+  backend_auth:
+    build:
+      context: ./backend/auth
+      dockerfile: Dockerfile
+    image: dmm_backend_auth
+    container_name: dmm_backend_auth
+    volumes:
+      - ./backend/auth:/app
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "3000:3000"
+  backend_view:
+    build:
+      context: ./backend/view
+      dockerfile: Dockerfile
+    image: dmm_backend_view
+    container_name: dmm_backend_view
+    volumes:
+      - ./backend/view:/app
+    working_dir: /app
+    command: npm run dev
+
+  backend_module:
+    build:
+      context: ./backend/module
+      dockerfile: Dockerfile
+    image: dmm_backend_module
+    container_name: dmm_backend_module
+    volumes:
+      - ./backend/module:/app
+    working_dir: /app
+    command: npm run dev
+
+  backend_datamanager:
+    build:
+      context: ./backend/datamanager
+      dockerfile: Dockerfile
+    image: dmm_backend_datamanager
+    container_name: dmm_backend_datamanager
+    volumes:
+      - ./backend/datamanager:/app
+    working_dir: /app
+    command: npm run dev
+
+  backend_mongo:
+    image: mongo
+    container_name: dmm_backend_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=secrets/mongo_root_password
