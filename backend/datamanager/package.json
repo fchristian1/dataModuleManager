@@ -24,7 +24,7 @@
   },
   "contributors": [],
   "scripts": {
-    "dev": "node --watch index.js",
+    "dev": "npm i && node --watch index.js",
     "start": "node index.js"
   },
   "dependencies": {

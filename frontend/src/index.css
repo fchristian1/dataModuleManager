@@ -8,3 +8,9 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+.cursor-pointer {
+    cursor: pointer;
+}
+.cursor-move {
+    cursor: move;
+}

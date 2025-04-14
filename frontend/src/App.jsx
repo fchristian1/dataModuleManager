@@ -1,18 +1,18 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useContext, useState } from "react";
 import MainLayout from "./layout/MainLayout";
+import { DataContext } from "./DataContext";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const dataContext = useContext(DataContext);
 
   return (
     <>
       <MainLayout
-        nav={null}
-        aside={null}
-        main={null}
-        footer={null}
+        nav={dataContext?.viewData?.data?.nav}
+        aside={dataContext?.viewData?.data?.aside}
+        main={dataContext?.viewData?.data?.main}
+        footer={dataContext?.viewData?.data?.footer}
+        debug={dataContext}
       ></MainLayout>
     </>
   );
