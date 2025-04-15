@@ -7,6 +7,10 @@ export const initDataController = (Services) => async (req, res) => {
       const { name, extUrl } = service;
       return { name, url: extUrl };
     }),
-    startViewLink: { service: "view", path: "/id/home" },
+    links: {
+      login: { service: "auth", path: "/login" },
+      register: { service: "auth", path: "/register" },
+      startViewLink: { service: "view", path: "/id/home" },
+    },
   });
 };

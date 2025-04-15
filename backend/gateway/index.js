@@ -4,7 +4,7 @@ import { healthController } from "./src/controller/health.js";
 import { servicesController } from "./src/controller/services.js";
 import { initDataController } from "./src/controller/initDataController.js";
 const url = "http://localhost:3000";
-const ServcieNames = ["auth", "data", "module", "view"];
+const ServcieNames = ["auth", "data", "module", "view", "frontend_modules"];
 const Services = ServcieNames.map((name) => {
   return {
     name,
@@ -14,8 +14,8 @@ const Services = ServcieNames.map((name) => {
 });
 
 const app = express();
-app.use(cors());
 app.use(json());
+app.use(cors());
 
 app.all("/health", healthController(Services));
 

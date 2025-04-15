@@ -20,7 +20,7 @@ export const DataProvider = ({ children }) => {
     getInitData();
   }, []);
   useEffect(() => {
-    setViewLink(initData?.startViewLink);
+    setViewLink(initData?.links?.startViewLink);
   }, [initData]);
   useEffect(() => {
     const getViewData = async () => {

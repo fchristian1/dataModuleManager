@@ -2,7 +2,11 @@ import { useState } from "react";
 
 export const DebugView = ({ data }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(data)[0]);
-  const [debugWindow, setDebugWindow] = useState({ show: true, x: 0, y: 0 });
+  const [debugWindow, setDebugWindow] = useState({
+    show: false,
+    x: 1090,
+    y: 75,
+  });
 
   return (
     <div

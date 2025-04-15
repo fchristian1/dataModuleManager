@@ -14,3 +14,4 @@
 .cursor-move {
     cursor: move;
 }
+@import './generated-colors.css';

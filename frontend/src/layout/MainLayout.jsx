@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DebugView } from "../components/DebugView";
 import { Nav } from "../components/site/Nav";
 import { Aside } from "../components/site/Aside";
+import { Main } from "../components/site/Main";
 
 const MainLayout = ({ nav, aside, main, footer, debug }) => {
   return (
@@ -17,7 +18,7 @@ const MainLayout = ({ nav, aside, main, footer, debug }) => {
             </aside>
           )}
           <main className="bg-white p-2 border-2 border-white rounded-[8px] w-full">
-            {JSON.stringify(main)}
+            <Main data={main}></Main>
           </main>
         </div>
         <footer className="bg-white p-2 border-2 border-white rounded-[8px]">

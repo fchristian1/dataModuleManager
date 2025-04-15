@@ -14,56 +14,102 @@ app.get("/api/v1/", (req, res) => {
 app.get("/api/v1/id/:id", (req, res) => {
   const { id } = req.params;
   const { userid } = req.headers;
+  let nav = {
+    a: [
+      {
+        name: "Home",
+        title: "Home of the site",
+        link: { service: "view", path: "/id/home" },
+        active: id == "home",
+      },
+      {
+        name: "Manager",
+        title: "Manager of the site",
+        link: { service: "view", path: "/id/manager" },
+        active: id == "manager",
+      },
+    ],
+    b: [],
+    c: [
+      {
+        name: "Login",
+        title: "Login to the site",
+        link: { service: "view", path: "/id/login" },
+        active: id == "login",
+      },
+      { name: "/" },
+      {
+        name: "Register",
+        title: "Register to the site",
+        link: { service: "view", path: "/id/register" },
+        active: id == "register",
+      },
+    ],
+  };
+  let aside = {
+    // a: {
+    //   title: "",
+    //   data: [
+    //     {
+    //       name: "Home",
+    //       title: "Home of the site",
+    //       link: { service: "view", path: "/id/home" },
+    //       active: id == "home",
+    //     },
+    //     {
+    //       name: "Manager",
+    //       title: "Manager of the site",
+    //       link: { service: "view", path: "/id/login" },
+    //       active: id == "manager",
+    //     },
+    //   ],
+    // },
+  };
+  let main = {};
+  let footer = {};
   if (!userid || userid == "") {
+    if (id == "home") {
+      main = {
+        a: {},
+      };
+    }
+    if (id == "manager") {
+      main = {
+        a: {
+          module: {
+            name: "Login",
+            version: "0.0.1",
+          },
+        },
+      };
+    }
+    if (id == "login") {
+      main = {
+        a: {
+          module: {
+            name: "Login",
+            version: "0.0.1",
+          },
+        },
+      };
+    }
+    if (id == "register") {
+      main = {
+        a: {
+          module: {
+            name: "Register",
+            version: "0.0.1",
+          },
+        },
+      };
+    }
     res.status(200).json({
       message: "OK",
       timestamp: Date.now(),
-      nav: {
-        a: [
-          {
-            name: "Home",
-            title: "Home of the site",
-            link: { service: "view", path: "/id/home" },
-            active: id == "home",
-          },
-          {
-            name: "Manager",
-            title: "Manager of the site",
-            link: { service: "view", path: "/id/login" },
-            active: id == "manager",
-          },
-        ],
-        b: [],
-        c: [
-          {
-            name: "Login",
-            title: "Login to the site",
-            link: { service: "view", path: "/id/login" },
-            active: id == "login",
-          },
-        ],
-      },
-      aside: {
-        // a: {
-        //   title: "",
-        //   data: [
-        //     {
-        //       name: "Home",
-        //       title: "Home of the site",
-        //       link: { service: "view", path: "/id/home" },
-        //       active: id == "home",
-        //     },
-        //     {
-        //       name: "Manager",
-        //       title: "Manager of the site",
-        //       link: { service: "view", path: "/id/login" },
-        //       active: id == "manager",
-        //     },
-        //   ],
-        // },
-      },
-      main: {},
-      footer: {},
+      nav: nav,
+      aside: aside,
+      main: main,
+      footer: footer,
     });
   } else {
     res.status(200).json({ message: "OK", view: id });
