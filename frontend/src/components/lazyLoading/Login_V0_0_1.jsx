@@ -6,6 +6,7 @@ import InputLabel from "../tags/inputs/InputLabel";
 import { DataContext } from "../../DataContext";
 import { getUrlFromLink } from "../../common/getUrlFromLink";
 import { sendDatatoUrl } from "../../common/sendDatatoUrl";
+import auth from "../../common/auth.js";
 
 const Login = () => {
   const dataContext = useContext(DataContext);
@@ -16,11 +17,25 @@ const Login = () => {
     });
   };
   const handleLogin = async () => {
+    setMessage("");
     const loginLink = dataContext.initData.links.login;
     const url = getUrlFromLink(loginLink, dataContext.initData.services);
-    console.log("login url", url);
-    const response = await sendDatatoUrl(url, "POST", { test: 1 });
-    console.log("response", response);
+    const { data } = await sendDatatoUrl(url, "POST", { email, password });
+    if (data.message != "OK") {
+      console.log("Login failed!");
+      setMessage("Login failed!");
+      return;
+    }
+
+    const loginStatus = auth.login(data.token, data.timestamp);
+    if (!loginStatus.status) {
+      console.log("Login failed!");
+      setMessage("Login failed!");
+      return;
+    }
+    dataContext.setLoginStatus(loginStatus.status);
+    dataContext.setUserData(loginStatus.userData);
+
     // dataContext.setViewLink({
     //   service: "view",
     //   path: "/id/manager",
@@ -36,6 +51,7 @@ const Login = () => {
   };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   return (
     <div className="flex justify-center items-center w-full h-full">
       <div className="bg-white shadow-lg p-4 px-10 py-12 border-1 border-gray-400 rounded-lg">
@@ -60,6 +76,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             ></InputLabel>
           </div>
+          <div className="text-red-500">{message}</div>
           <hr />
           <div className="flex justify-center gap-4 mt-4 mb-10">
             <ButtonSolidColor
@@ -77,7 +94,7 @@ const Login = () => {
             onClick={handleGoToRegister}
             className="flex justify-center my-10 w-full hover:text-amber-700 cursor-pointer"
           >
-            go here to register
+            click here to register
           </div>
         </div>
       </div>

@@ -23,6 +23,8 @@ services:
     command: npm run dev
     ports:
       - "3000:3000"
+    environment:
+      - DATA_BACKEND_URL=${DATA_BACKEND_URL}
   backend_auth:
     build:
       context: ./backend/auth
@@ -33,6 +35,8 @@ services:
       - ./backend/auth:/app
     working_dir: /app
     command: npm run dev
+    environment:
+      - DATA_BACKEND_URL=${DATA_BACKEND_URL}
   backend_view:
     build:
       context: ./backend/view
@@ -43,7 +47,8 @@ services:
       - ./backend/view:/app
     working_dir: /app
     command: npm run dev
-
+    environment:
+      - DATA_BACKEND_URL=${DATA_BACKEND_URL}
   backend_module:
     build:
       context: ./backend/module
@@ -54,7 +59,8 @@ services:
       - ./backend/module:/app
     working_dir: /app
     command: npm run dev
-
+    environment:
+      - DATA_BACKEND_URL=${DATA_BACKEND_URL}
   backend_data:
     build:
       context: ./backend/datamanager
@@ -65,14 +71,41 @@ services:
       - ./backend/datamanager:/app
     working_dir: /app
     command: npm run dev
-
+    environment:
+      - DATA_BACKEND_URL=${DATA_BACKEND_URL}
+      - MONGO_URL=${MONGO_URL}
   backend_mongo:
     image: mongo
     container_name: dmm_backend_mongo
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
+      - ./data/mongodb:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+
+  backend_mongoexpress:
+    image: mongo-express
+    container_name: dmm_backend_mongoexpress
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=backend_mongo
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ME_CONFIG_BASICAUTH_USERNAME=${ME_CONFIG_BASICAUTH_USERNAME}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${ME_CONFIG_BASICAUTH_PASSWORD}
+      - DEBUG=mongo-express:*
+    depends_on:
+      - backend_mongo
+    entrypoint: >
+      /bin/sh -c "
+        echo 'Warte auf MongoDB...';
+        for i in $(seq 1 10); do
+          nc -z backend_mongo 27017 && break;
+          echo 'Mongo noch nicht erreichbar, warte...';
+          sleep 2;
+        done;
+        echo 'Starte mongo-express';
+        exec tini -- node app"

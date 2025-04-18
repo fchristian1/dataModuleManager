@@ -1,9 +1,12 @@
-import { createContext, use, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { getUrlFromLink } from "./common/getUrlFromLink";
+import auth from "./common/auth.js";
 
 export const DataContext = createContext(null);
 
 export const DataProvider = ({ children }) => {
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [userData, setUserData] = useState(null);
   const [initData, setInitData] = useState(null);
   const [viewData, setViewData] = useState(null);
   const [viewLink, setViewLink] = useState(null);
@@ -20,7 +23,20 @@ export const DataProvider = ({ children }) => {
     getInitData();
   }, []);
   useEffect(() => {
-    setViewLink(initData?.links?.startViewLink);
+    let startViewLink;
+
+    const { status, userdata } = auth.relogin();
+    if (status) {
+      setLoginStatus(status);
+      setUserData(userdata);
+      startViewLink = initData?.links?.startViewLink;
+    } else {
+      setLoginStatus(false);
+      setUserData(null);
+      startViewLink = initData?.links?.startViewLink;
+    }
+
+    setViewLink(startViewLink);
   }, [initData]);
   useEffect(() => {
     const getViewData = async () => {
@@ -48,6 +64,10 @@ export const DataProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
+        loginStatus,
+        setLoginStatus,
+        userData,
+        setUserData,
         initData,
         setInitData,
         viewData,

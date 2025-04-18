@@ -16,7 +16,10 @@ const Services = ServcieNames.map((name) => {
 const app = express();
 app.use(json());
 app.use(cors());
-
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 app.all("/health", healthController(Services));
 
 // erklärung /^\/api\/v(\d+)\/([^\/]+)\/?(.*)?/

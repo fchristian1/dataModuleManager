@@ -81,7 +81,7 @@ const Register = () => {
             onClick={handleGoToLogin}
             className="flex justify-center my-10 w-full hover:text-amber-700 cursor-pointer"
           >
-            go here to login
+            click here to login
           </div>
         </div>
       </div>

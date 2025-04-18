@@ -1,6 +1,6 @@
 export const sendDatatoUrl = async (url, method, data) => {
   const json = JSON.stringify(data);
-  console.log("json", json);
+  //console.log("json", json);
   const response = await fetch(url, {
     method: method,
     headers: {
